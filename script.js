@@ -6,6 +6,8 @@ const category = document.getElementById("category");
 
 //Seleciona os elementos da lista
 const expenseList = document.querySelector("ul");
+const expensesTotal = document.querySelector("aside header h2");
+const expensesQuantity = document.querySelector("aside header p span");
 
 // Captura o evento de input para formatar o valor
 amount.oninput = () => {
@@ -102,8 +104,54 @@ function expenseAdd(newExpense) {
 
     //Adiciona o item na lista
     expenseList.append(expenseItem);
+
+    //Atualiza os totais
+    updateTotals();
   } catch (error) {
     alert("Não foi possível atualizar a lista de despesas");
     console.log(error);
+  }
+}
+
+//Atualiza totais
+
+function updateTotals() {
+  try {
+    // Recupera todos os itens (li) da lista (ul)
+    const items = expenseList.children;
+
+    //atualiza quantidade de itens na lista
+    expensesQuantity.textContent = `${items.length} ${
+      items.length > 1 ? "despesas" : "despesa"
+    }`;
+
+    // Variavel para incrementar o total
+    let total = 0;
+
+    //percorre cada item da lista
+    for (let item = 0; item < items.length; item++) {
+      const itemAmount = items[item].querySelector(".expense-amount");
+
+      //remover caracterer nao numericos e substituir virgula pelo ponto
+      let value = itemAmount.textContent
+        .replace(/[^\d]/g, "")
+        .replace(",", ".");
+
+      // converte valor para float
+      value = parseFloat(value);
+
+      // Verifica se é numero valido
+      if (isNaN(value)) {
+        return alert("Não foi possível calcular o total");
+      }
+
+      // Incrementar o valor total
+      total += Number(value);
+    }
+
+    expensesTotal.textContent = total
+  } catch (error) {
+    console.log(error);
+    alert("Não foi possível atualizar os totais");
   }
 }
