@@ -107,6 +107,7 @@ function expenseAdd(newExpense) {
 
     //Atualiza os totais
     updateTotals();
+    formClear();
   } catch (error) {
     alert("Não foi possível atualizar a lista de despesas");
     console.log(error);
@@ -178,3 +179,12 @@ expenseList.addEventListener("click", (event) => {
 
   updateTotals();
 });
+
+// Limpar formulario
+function formClear() {
+  expense.value = "";
+  category.value = "";
+  amount.value = "";
+
+  expense.focus();
+}
